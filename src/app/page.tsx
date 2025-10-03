@@ -5,6 +5,7 @@ export default function Home() {
   return (
     <div className="font-sans items-center items-center min-h-screen">
       <main className="flex flex-col items-center w-full h-screen">
+        \{/* HEADER */}
         <div className="flex justify-start items-center w-full h-[100px] px-10">
           <Link href="/" className="text-2xl font-bold">
             Lunbi
