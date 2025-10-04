@@ -1,4 +1,5 @@
 "use client";
+import Spline from "@splinetool/react-spline";
 
 import {
   Conversation,
@@ -17,24 +18,64 @@ import { Response } from "@/components/ai/response";
 
 export default function Chat() {
   const [input, setInput] = useState("");
-  const { messages, append, status } = useChat();
+  const { messages, status, sendMessage } = useChat();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
     if (input.trim()) {
-      append({ role: "user", content: input });
+      // sendQuestion(input);
+      sendMessage({ text: input });
       setInput("");
     }
   };
 
+  async function sendQuestion(query: string) {
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query }),
+    });
+
+    const data = await res.json();
+    console.log(data.answer);
+  }
+
   return (
     <div className="flex flex-col h-full w-full">
-      <Conversation>
-        <ConversationContent>
+      {messages.length === 0 && (
+        <div className="flex flex-col gap-4 justify-center items-center">
+          <div className="w-200 h-100 z-10">
+            <Spline scene="https://prod.spline.design/v-ERD9x9lMRbsI7b/scene.splinecode" />
+          </div>
+          <div className="flex flex-col items-center justify-center w-full h-full">
+            <h1 className="text-5xl font-bold font-plus-jakarta-sans">
+              Welcome to Lunbi
+            </h1>
+            <h1 className="text-gray-500">
+              Ask about whatever you need about space, biology and more
+            </h1>
+          </div>
+        </div>
+      )}
+
+      <Conversation className="flex flex-col justify-end">
+        <ConversationContent className="flex flex-col justify-end">
           {messages.map((message) => (
             <Message from={message.role} key={message.id}>
               <MessageContent>
-                <Response>{message.content}</Response>
+                {message.parts.map((part, index) => {
+                  switch (part.type) {
+                    case "text":
+                      return (
+                        <Response key={`${message.id}-${index}`}>
+                          {part.text}
+                        </Response>
+                      );
+                    default:
+                      return null;
+                  }
+                })}
               </MessageContent>
             </Message>
           ))}

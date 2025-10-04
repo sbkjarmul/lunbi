@@ -19,19 +19,6 @@ export default function ChatPage() {
         p-10
         "
         >
-          <div className="w-200 h-200 z-10">
-            <Spline scene="https://prod.spline.design/v-ERD9x9lMRbsI7b/scene.splinecode" />
-          </div>
-
-          <div className="flex flex-col items-center justify-center w-full h-full">
-            <h1 className="text-5xl font-bold font-plus-jakarta-sans">
-              Welcome to Lunbi
-            </h1>
-            <h1 className="text-gray-500">
-              Ask about whatever you need about space, biology and more
-            </h1>
-          </div>
-
           <Chat />
         </div>
       </div>
