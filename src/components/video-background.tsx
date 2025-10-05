@@ -6,16 +6,13 @@ export default function VideoBackground() {
     "
     >
       <video
-        autoPlay // Uruchamia wideo automatycznie
-        loop // Powtarza wideo w pętli
-        muted // Wycisza wideo (wymagane do autoPlay w wielu przeglądarkach)
-        playsInline // Ważne dla odtwarzania wideo na urządzeniach mobilnych
-        className="video-element"
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="video-element h-full w-full object-cover"
       >
-        {/* WebM jako preferowany format */}
         <source src="/videos/lunbi-background-gradient.mp4" type="video/mp4" />
-        {/* Warto dodać fallback w postaci MP4 dla lepszej kompatybilności */}
-        {/* <source src="/videos/tlo.mp4" type="video/mp4" /> */}
         Twoja przeglądarka nie obsługuje tagu wideo.
       </video>
     </div>

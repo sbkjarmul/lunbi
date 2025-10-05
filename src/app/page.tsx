@@ -1,14 +1,27 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import VideoBackground from "@/components/video-background";
 import { SearchIcon, SendIcon } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function Home() {
+  const [query, setQuery] = useState("");
+  const router = useRouter();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (query.trim()) {
+      router.push(`/chat?query=${encodeURIComponent(query)}`);
+    }
+  };
+
   return (
-    <div className="relative font-sans items-center items-center ">
+    <div className="relative font-sans items-center items-center">
       <main className="flex flex-col items-center w-full h-screen px-20">
-        {/* HEADER */}
         <div className="flex justify-between items-center w-full h-[160px] z-2">
           <Link href="/" className="text-2xl font-bold">
             Lunbi
@@ -52,11 +65,14 @@ export default function Home() {
               <Input
                 placeholder="Ask me everything..."
                 className="border-none shadow-none md:text-xl"
+                onChange={(e) => setQuery(e.target.value)}
               />
-              <Button className="rounded-full" asChild>
-                <Link href="/chat">
-                  Search <SendIcon />
-                </Link>
+              <Button
+                className="rounded-full"
+                onClick={handleSearch}
+                disabled={!query}
+              >
+                Search <SendIcon />
               </Button>
             </div>
           </div>

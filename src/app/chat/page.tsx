@@ -1,6 +1,5 @@
-import Spline from "@splinetool/react-spline";
 import Link from "next/link";
-import Chat from "./components/chat";
+import Chat from "./components/chat-prompt";
 
 export default function ChatPage() {
   return (
@@ -22,10 +21,6 @@ export default function ChatPage() {
           <Chat />
         </div>
       </div>
-
-      {/* <div className="absolute top-0 left-0 w-full h-full z-10">
-        <Spline scene="https://prod.spline.design/v-ERD9x9lMRbsI7b/scene.splinecode" />
-      </div> */}
     </div>
   );
 }

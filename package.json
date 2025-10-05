@@ -28,6 +28,8 @@
     "harden-react-markdown": "^1.1.2",
     "katex": "^0.16.23",
     "lucide-react": "^0.544.0",
+    "motion": "^12.23.22",
+    "nanoid": "^5.1.6",
     "next": "15.5.4",
     "postcss": "^8.5.6",
     "react": "19.1.0",

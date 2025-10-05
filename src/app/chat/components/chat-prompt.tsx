@@ -12,33 +12,90 @@ import {
   PromptInputTextarea,
   PromptInputSubmit,
 } from "@/components/ai/prompt-input";
-import { useChat } from "@ai-sdk/react";
-import { useState } from "react";
-import { Response } from "@/components/ai/response";
+import { useState, useId, useEffect } from "react";
+import { ChatStatus } from "ai";
+
+import { nanoid } from "nanoid";
+import { TextShimmer } from "components/motion-primitives/text-shimmer";
+import { TextEffect } from "components/motion-primitives/text-effect";
+import { useSearchParams } from "next/navigation";
+
+type LunbiMessage = {
+  id: string;
+  status: string;
+  answer: string;
+  source: {
+    title: string;
+    url: string;
+  };
+  role: "system" | "user" | "assistant";
+};
+
+const createUserMessage = (query: string): LunbiMessage => {
+  return {
+    id: nanoid(),
+    status: "success",
+    answer: query,
+    source: {
+      title: "User Message",
+      url: "none",
+    },
+    role: "user",
+  };
+};
+
+export function LoadingText() {
+  return (
+    <TextShimmer className="font-mono text-sm" duration={1}>
+      Generating Answer...
+    </TextShimmer>
+  );
+}
 
 export default function Chat() {
   const [input, setInput] = useState("");
-  const { messages, status, sendMessage } = useChat();
+  const [messages, setMessages] = useState<LunbiMessage[]>([]);
+  const [status, setStatus] = useState<ChatStatus>();
+
+  const searchParams = useSearchParams();
+  const searchParamsQuery = searchParams.get("query");
+
+  useEffect(() => {
+    if (searchParamsQuery) {
+      console.log("status", status);
+      console.log("searchParamsQuery", searchParamsQuery);
+      sendMessage(searchParamsQuery);
+    }
+  }, [searchParamsQuery]);
+
+  const sendMessage = (query: string) => {
+    setStatus("submitted");
+    const userMessage = createUserMessage(query);
+    setMessages((prev) => [...prev, userMessage]);
+    sendQuestion(query);
+    setInput("");
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (input.trim()) {
-      // sendQuestion(input);
-      sendMessage({ text: input });
-      setInput("");
+      sendMessage(input);
     }
   };
 
   async function sendQuestion(query: string) {
-    const res = await fetch("/api/chat", {
+    const res = await fetch("/api/prompt", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ query }),
     });
 
     const data = await res.json();
-    console.log(data.answer);
+
+    setMessages((prev) => [...prev, data]);
+
+    setStatus("ready");
   }
 
   return (
@@ -59,26 +116,19 @@ export default function Chat() {
         </div>
       )}
 
-      <Conversation className="flex flex-col justify-end">
-        <ConversationContent className="flex flex-col justify-end">
-          {messages.map((message) => (
-            <Message from={message.role} key={message.id}>
+      <Conversation>
+        <ConversationContent>
+          {messages?.map((message, index) => (
+            <Message from={message.role} key={`${message?.id}-${index}`}>
               <MessageContent>
-                {message.parts.map((part, index) => {
-                  switch (part.type) {
-                    case "text":
-                      return (
-                        <Response key={`${message.id}-${index}`}>
-                          {part.text}
-                        </Response>
-                      );
-                    default:
-                      return null;
-                  }
-                })}
+                <TextEffect per="word" preset="fade">
+                  {message.answer}
+                </TextEffect>
               </MessageContent>
             </Message>
           ))}
+
+          {status === "submitted" && <LoadingText />}
         </ConversationContent>
         <ConversationScrollButton />
       </Conversation>
