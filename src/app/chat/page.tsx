@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Chat from "./components/chat-prompt";
+import { Suspense } from "react";
 
 export default function ChatPage() {
   return (
@@ -18,7 +19,9 @@ export default function ChatPage() {
         p-10
         "
         >
-          <Chat />
+          <Suspense>
+            <Chat />
+          </Suspense>
         </div>
       </div>
     </div>

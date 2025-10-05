@@ -12,12 +12,12 @@ import {
   PromptInputTextarea,
   PromptInputSubmit,
 } from "@/components/ai/prompt-input";
-import { useState, useId, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { ChatStatus } from "ai";
 
 import { nanoid } from "nanoid";
-import { TextShimmer } from "components/motion-primitives/text-shimmer";
-import { TextEffect } from "components/motion-primitives/text-effect";
+import { TextShimmer } from "@/components/motion-primitives/text-shimmer";
+import { TextEffect } from "@/components/motion-primitives/text-effect";
 import { useSearchParams } from "next/navigation";
 
 type LunbiMessage = {
@@ -62,8 +62,6 @@ export default function Chat() {
 
   useEffect(() => {
     if (searchParamsQuery) {
-      console.log("status", status);
-      console.log("searchParamsQuery", searchParamsQuery);
       sendMessage(searchParamsQuery);
     }
   }, [searchParamsQuery]);
@@ -107,10 +105,15 @@ export default function Chat() {
           </div>
           <div className="flex flex-col items-center justify-center w-full h-full">
             <h1 className="text-5xl font-bold font-plus-jakarta-sans">
-              Welcome to Lunbi
+              <TextEffect per="word" preset="fade">
+                Welcome to Lunbi
+              </TextEffect>
             </h1>
+
             <h1 className="text-gray-500">
-              Ask about whatever you need about space, biology and more
+              <TextEffect per="word" preset="fade">
+                Ask about whatever you need about space, biology and more
+              </TextEffect>
             </h1>
           </div>
         </div>
