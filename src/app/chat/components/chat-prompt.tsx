@@ -19,6 +19,7 @@ import { nanoid } from "nanoid";
 import { TextShimmer } from "@/components/motion-primitives/text-shimmer";
 import { TextEffect } from "@/components/motion-primitives/text-effect";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 type LunbiMessage = {
   id: string;
@@ -38,7 +39,7 @@ const createUserMessage = (query: string): LunbiMessage => {
     answer: query,
     source: {
       title: "User Message",
-      url: "none",
+      url: "",
     },
     role: "user",
   };
@@ -124,9 +125,18 @@ export default function Chat() {
           {messages?.map((message, index) => (
             <Message from={message.role} key={`${message?.id}-${index}`}>
               <MessageContent>
-                <TextEffect per="word" preset="fade">
+                <TextEffect per="word" preset="fade" speedReveal={5}>
                   {message.answer}
                 </TextEffect>
+                {message?.source?.url && (
+                  <div className="flex gap-4 italic mt-4">
+                    <Link href={message?.source?.url}>
+                      <TextEffect per="word" preset="fade" delay={2}>
+                        {`Source: ${message.source.url}`}
+                      </TextEffect>
+                    </Link>
+                  </div>
+                )}
               </MessageContent>
             </Message>
           ))}
