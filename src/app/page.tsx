@@ -34,10 +34,10 @@ export default function Home() {
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
-            <h2 className="text-gray-900 max-w-[260px] text-4xl font-bold">
+            <h2 className="text-gray-900 max-w-[260px] text-4xl font-bold ">
               Meet Lunbi, your cosmic biology{" "}
               <TextLoop
-                className="overflow-y-clip"
+                className="overflow-y-clip translate-y-[7px]"
                 transition={{
                   type: "spring",
                   stiffness: 900,
